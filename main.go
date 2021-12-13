@@ -1,13 +1,12 @@
 package main
 
-import (
-	"AnalysisService/config"
-	"AnalysisService/routes"
-)
+import "AnalysisService/test"
 
 func main() {
-	config.ConnectDatabase()
-	r := routes.SetupRouter()
-
-	r.Run("0.0.0.0:8000")
+	//config.ConnectDatabase()
+	//r := routes.SetupRouter()
+	//
+	//r.Run("0.0.0.0:8000")
+	test.GameVSGameChart_test()
+	test.AnnualSaleChart_test()
 }
