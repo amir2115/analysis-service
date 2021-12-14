@@ -8,6 +8,7 @@ import (
 )
 
 var regionSales = [...]string{"NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales", "Global_Sales"}
+var categories = [...]string{"Sports", "Platform", "Racing", "Role-playing", "Puzzle", "Misc", "Shooter", "Simulation", "Action", "Fighting", "Adventure", "Strategy"}
 
 func GameVsGameChart(gameOne string, gameTwo string, gameOneSales []float32, gameTwoSales []float32) {
 	bar := charts.NewBar()
@@ -23,6 +24,7 @@ func GameVsGameChart(gameOne string, gameTwo string, gameOneSales []float32, gam
 }
 func AnnualSaleChart(firstYear int, LastYear int, totalGameSales []float32) {
 	bar := charts.NewBar()
+	bar.XYReversal()
 	bar.SetGlobalOptions(charts.WithTitleOpts(opts.Title{
 		Title:    fmt.Sprintf("Annual Sales %d - %d", firstYear, LastYear),
 		Subtitle: "sales",
@@ -33,6 +35,46 @@ func AnnualSaleChart(firstYear int, LastYear int, totalGameSales []float32) {
 	_ = bar.Render(f)
 }
 
+func CompanyVsCompanyChart(companyOne string, companyTwo string, firstYear int, LastYear int, companyOneSales []float32, companyTwoSales []float32) {
+	bar := charts.NewBar()
+	bar.XYReversal()
+	bar.SetGlobalOptions(charts.WithTitleOpts(opts.Title{
+		Title:    fmt.Sprintf("%s vs %s", companyOne, companyTwo),
+		Subtitle: "sales",
+	}))
+	bar.SetXAxis(annualSalesLabelMaker(firstYear, LastYear)).
+		AddSeries("Category A", generateCompanyVsCompanyBarItems(companyOneSales, LastYear-firstYear+1)).
+		AddSeries("Category B", generateCompanyVsCompanyBarItems(companyTwoSales, LastYear-firstYear+1))
+	f, _ := os.Create(fmt.Sprintf("%s%s-%d-%d.html", companyOne, companyTwo, firstYear, LastYear))
+	_ = bar.Render(f)
+}
+func AllCategoriesChart(firstYear int, LastYear int, categoryGameSales []float32) {
+	bar := charts.NewBar()
+	bar.XYReversal()
+	bar.SetGlobalOptions(charts.WithTitleOpts(opts.Title{
+		Title:    fmt.Sprintf("Category Sales %d - %d", firstYear, LastYear),
+		Subtitle: "sales",
+	}))
+
+	bar.SetXAxis(categories).
+		AddSeries("Category A", generateAllCategoriesBarItems(categoryGameSales))
+	f, _ := os.Create(fmt.Sprintf("categories-%d-%d.html", firstYear, LastYear))
+	_ = bar.Render(f)
+}
+func generateAllCategoriesBarItems(gameSales []float32) []opts.BarData {
+	items := make([]opts.BarData, 0)
+	for i := 0; i < len(categories); i++ {
+		items = append(items, opts.BarData{Value: gameSales[i], Label: &opts.Label{Show: true}})
+	}
+	return items
+}
+func generateCompanyVsCompanyBarItems(gameSales []float32, yearCount int) []opts.BarData {
+	items := make([]opts.BarData, 0)
+	for i := 0; i < yearCount; i++ {
+		items = append(items, opts.BarData{Value: gameSales[i], Label: &opts.Label{Show: true}})
+	}
+	return items
+}
 func generateAnnualSaleBarItems(gameSales []float32, yearCount int) []opts.BarData {
 	items := make([]opts.BarData, 0)
 	for i := 0; i < yearCount; i++ {
