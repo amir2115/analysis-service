@@ -10,5 +10,5 @@ func main() {
 	test.GameVSGameChart_test()
 	test.AnnualSaleChart_test()
 	test.CompanyVsCompanyChart_test()
-	test.AllCategoriesChart_test()
+	test.AllGenresChart_test()
 }

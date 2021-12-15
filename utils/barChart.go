@@ -1,4 +1,4 @@
-package visualizer
+package utils
 
 import (
 	"fmt"
@@ -7,16 +7,13 @@ import (
 	"os"
 )
 
-var regionSales = [...]string{"NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales", "Global_Sales"}
-var categories = [...]string{"Sports", "Platform", "Racing", "Role-playing", "Puzzle", "Misc", "Shooter", "Simulation", "Action", "Fighting", "Adventure", "Strategy"}
-
 func GameVsGameChart(gameOne string, gameTwo string, gameOneSales []float32, gameTwoSales []float32) {
 	bar := charts.NewBar()
 	bar.SetGlobalOptions(charts.WithTitleOpts(opts.Title{
 		Title:    fmt.Sprintf("%s vs %s", gameOne, gameTwo),
 		Subtitle: "sales",
 	}))
-	bar.SetXAxis(regionSales).
+	bar.SetXAxis(RegionNames).
 		AddSeries("Category A", generateGameVsGameBarItems(gameOneSales)).
 		AddSeries("Category B", generateGameVsGameBarItems(gameTwoSales))
 	f, _ := os.Create(fmt.Sprintf("%s%s.html", gameOne, gameTwo))
@@ -48,7 +45,7 @@ func CompanyVsCompanyChart(companyOne string, companyTwo string, firstYear int, 
 	f, _ := os.Create(fmt.Sprintf("%s%s-%d-%d.html", companyOne, companyTwo, firstYear, LastYear))
 	_ = bar.Render(f)
 }
-func AllCategoriesChart(firstYear int, LastYear int, categoryGameSales []float32) {
+func AllGenresChart(firstYear int, LastYear int, categoryGameSales []float32) {
 	bar := charts.NewBar()
 	bar.XYReversal()
 	bar.SetGlobalOptions(charts.WithTitleOpts(opts.Title{
@@ -56,14 +53,14 @@ func AllCategoriesChart(firstYear int, LastYear int, categoryGameSales []float32
 		Subtitle: "sales",
 	}))
 
-	bar.SetXAxis(categories).
-		AddSeries("Category A", generateAllCategoriesBarItems(categoryGameSales))
-	f, _ := os.Create(fmt.Sprintf("categories-%d-%d.html", firstYear, LastYear))
+	bar.SetXAxis(Genres).
+		AddSeries("Category A", generateAllGenresBarItems(categoryGameSales))
+	f, _ := os.Create(fmt.Sprintf("genres-%d-%d.html", firstYear, LastYear))
 	_ = bar.Render(f)
 }
-func generateAllCategoriesBarItems(gameSales []float32) []opts.BarData {
+func generateAllGenresBarItems(gameSales []float32) []opts.BarData {
 	items := make([]opts.BarData, 0)
-	for i := 0; i < len(categories); i++ {
+	for i := 0; i < len(Genres); i++ {
 		items = append(items, opts.BarData{Value: gameSales[i], Label: &opts.Label{Show: true}})
 	}
 	return items
@@ -85,7 +82,7 @@ func generateAnnualSaleBarItems(gameSales []float32, yearCount int) []opts.BarDa
 
 func generateGameVsGameBarItems(gameSales []float32) []opts.BarData {
 	items := make([]opts.BarData, 0)
-	for i := 0; i < len(regionSales); i++ {
+	for i := 0; i < len(RegionNames); i++ {
 		items = append(items, opts.BarData{Value: gameSales[i], Label: &opts.Label{Show: true}})
 	}
 	return items
