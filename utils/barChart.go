@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func GameVsGameChart(gameOne string, gameTwo string, gameOneSales []float32, gameTwoSales []float32) {
+func GameVsGameChart(gameOne string, gameTwo string, gameOneSales []float32, gameTwoSales []float32) string {
 	bar := charts.NewBar()
 	bar.SetGlobalOptions(charts.WithTitleOpts(opts.Title{
 		Title:    fmt.Sprintf("%s vs %s", gameOne, gameTwo),
@@ -18,8 +18,9 @@ func GameVsGameChart(gameOne string, gameTwo string, gameOneSales []float32, gam
 		AddSeries("Category B", generateGameVsGameBarItems(gameTwoSales))
 	f, _ := os.Create(fmt.Sprintf("%s%s.html", gameOne, gameTwo))
 	_ = bar.Render(f)
+	return f.Name()
 }
-func AnnualSaleChart(firstYear int, LastYear int, totalGameSales []float32) {
+func AnnualSaleChart(firstYear int, LastYear int, totalGameSales []float32) string {
 	bar := charts.NewBar()
 	bar.XYReversal()
 	bar.SetGlobalOptions(charts.WithTitleOpts(opts.Title{
@@ -30,9 +31,10 @@ func AnnualSaleChart(firstYear int, LastYear int, totalGameSales []float32) {
 		AddSeries("Category A", generateAnnualSaleBarItems(totalGameSales, LastYear-firstYear+1))
 	f, _ := os.Create(fmt.Sprintf("annualSales%d-%d.html", firstYear, LastYear))
 	_ = bar.Render(f)
+	return f.Name()
 }
 
-func CompanyVsCompanyChart(companyOne string, companyTwo string, firstYear int, LastYear int, companyOneSales []float32, companyTwoSales []float32) {
+func CompanyVsCompanyChart(companyOne string, companyTwo string, firstYear int, LastYear int, companyOneSales []float32, companyTwoSales []float32) string {
 	bar := charts.NewBar()
 	bar.XYReversal()
 	bar.SetGlobalOptions(charts.WithTitleOpts(opts.Title{
@@ -44,8 +46,9 @@ func CompanyVsCompanyChart(companyOne string, companyTwo string, firstYear int, 
 		AddSeries("Category B", generateCompanyVsCompanyBarItems(companyTwoSales, LastYear-firstYear+1))
 	f, _ := os.Create(fmt.Sprintf("%s%s-%d-%d.html", companyOne, companyTwo, firstYear, LastYear))
 	_ = bar.Render(f)
+	return f.Name()
 }
-func AllGenresChart(firstYear int, LastYear int, categoryGameSales []float32) {
+func AllGenresChart(firstYear int, LastYear int, categoryGameSales []float32) string {
 	bar := charts.NewBar()
 	bar.XYReversal()
 	bar.SetGlobalOptions(charts.WithTitleOpts(opts.Title{
@@ -57,6 +60,7 @@ func AllGenresChart(firstYear int, LastYear int, categoryGameSales []float32) {
 		AddSeries("Category A", generateAllGenresBarItems(categoryGameSales))
 	f, _ := os.Create(fmt.Sprintf("genres-%d-%d.html", firstYear, LastYear))
 	_ = bar.Render(f)
+	return f.Name()
 }
 func generateAllGenresBarItems(gameSales []float32) []opts.BarData {
 	items := make([]opts.BarData, 0)
