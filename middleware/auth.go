@@ -11,7 +11,7 @@ import (
 )
 
 type AuthenticationResponse struct {
-	MessageCode int    `json:"message_code"`
+	MessageCode int    `json:"messageCode"`
 	Message     string `json:"message"`
 }
 
@@ -23,7 +23,7 @@ func Authentication() gin.HandlerFunc {
 			c.Abort()
 		}
 		auth := getAuthenticationResult(token)
-		if auth.MessageCode != 404 {
+		if auth.MessageCode != 409 {
 			c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": err.Error()})
 			c.Abort()
 		}
