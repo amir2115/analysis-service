@@ -31,9 +31,10 @@ type DBConfig struct {
 }
 
 func BuildDBConfig() *DBConfig {
+	port_num, err := strconv.Atoi(os.Getenv("game_history_port_var"))
 	dbConfig := DBConfig{
 		Host:     os.Getenv("game_history_host_var"),
-		Port:     int(os.Getenv("game_history_port_var")),
+		Port:     port_num,
 		User:     "root",
 		Password: os.Getenv("game_history_pass_var"),
 		DBName:   os.Getenv("game_history_name_var"),
