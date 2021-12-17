@@ -38,7 +38,7 @@ func getAuthenticationResult(token string) AuthenticationResponse {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	response, err := http.Post("", "application/json", bytes.NewBuffer(requestBody))
+	response, err := http.Post(utils.AuthBaseURL, "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
 		log.Fatalln(err)
 	}
