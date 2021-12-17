@@ -27,9 +27,10 @@ func SetupRouter() *gin.Engine {
 	r := gin.Default()
 	r.LoadHTMLGlob("*.html")
 	r.Use(CORSMiddleware())
-	r.GET("/graph/region/:gameOne/:gameTwo", middleware.Authentication(), controllers.GetGameVsGameChart)
-	r.GET("/graph/annual/:firstYear/:lastYear", middleware.Authentication(), controllers.GetAnnualSaleChart)
-	r.GET("/graph/company/:companyOne/:companyTwo/:firstYear/:lastYear", middleware.Authentication(), controllers.GetCompanyVsCompanyChart)
-	r.GET("/graph/genre/:firstYear/:lastYear", middleware.Authentication(), controllers.GetAllGenresChart)
+	r.Use(middleware.Authentication())
+	r.GET("/graph/region/:gameOne/:gameTwo", controllers.GetGameVsGameChart)
+	r.GET("/graph/annual/:firstYear/:lastYear", controllers.GetAnnualSaleChart)
+	r.GET("/graph/company/:companyOne/:companyTwo/:firstYear/:lastYear", controllers.GetCompanyVsCompanyChart)
+	r.GET("/graph/genre/:firstYear/:lastYear", controllers.GetAllGenresChart)
 	return r
 }
